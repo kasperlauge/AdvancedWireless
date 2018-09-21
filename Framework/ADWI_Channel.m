@@ -19,12 +19,10 @@ x_i = zeros(length(delay_profile),1);
 for i = 1:length(delay_profile)
     tau_i = delay_profile(i,1);
     phi_i = 2*pi*carrier_frequency*tau_i-doppler;
-    x_i(i) = delay_profile(i,2)*exp(1i*phi_i)*exp(-1i*2*pi*carrier_frequency*tau_i);
+    x_i(i) = sum(delay_profile(1,i:end)*exp(-1i*phi_i));
 end
 
-h = sum(x_i);
-
-txsignal = ifft(h*fft(txsignal));
+txsignal = conv(ifft(x_i),fft(txsignal));
 
 
 x=txsignal;
